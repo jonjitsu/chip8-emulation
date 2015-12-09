@@ -1,1 +1,72 @@
-* chip8 emulator project more for an exercise than usefulness
+* chip8 emulator exercise
+
+* Hardware 
+** Memory
+- 1k-4k
+
+|             |                                                       |
+|-------------+-------------------------------------------------------|
+| 0x000-0x1FF | original interpreter (should not be used by programs) |
+|       0x200 | Start of most programs                                |
+|             |                                                       |
+|       0x600 | Start of ETI 660 chip-8 programs                      |
+|       0xE9F | End of program code                                   |
+| 0xEA0-0xEFF | Call stack, internal use other variables              |
+| 0xF00-0xFFF | Display buffer                                        |
+
+** Registers
+- 16 8bit registers (V0-VF)
+- VF flag register for some instructions (should not be used by any program)
+- 1 16bit register called I for memory addresses
+- 2 8bit registers for timers (delay and sound) [when > 0, then decremented at rate of 60hz)
+- 1 16bit PC Program counter (not accessable)
+- 1 8bit stack pointer (not accessable)
+
+** Stack
+- An array of 16 16bit values.
+- used for subroutine return addresses.
+
+** Keyboard
+16-key hexadecimal keypad
+| 1 | 2 | 3 | c |
+| 4 | 5 | 6 | D |
+| 7 | 8 | 9 | E |
+| A | 0 | B | F |
+
+** Display
+64x32 pixel monochrome display
+| (0,0) |         |
+|       | (63,31) |
+
+ETI 660: 64x48 & 64x64 models
+
+Uses sprites for drawing.
+8 pixels in width
+8x15 byte max size
+drawn in XOR mode
+when a bit is erased in buffer VF gets set to 1 (used for collision detection)
+
+
+Chars 0 - F are represented by sprites 5 bytes long (8x5) stored within the 0x00-0x1FF area
+
+
+
+** Timers & Sound
+*** Delay timer (DT)
+Active when > 0
+dec 1 from DT at 60Hz
+When DT eq 0 then deactivate.
+
+*** Sound timer (ST)
+Active when > 0
+dec 1 from DT at 60Hz
+if ST>0 sound buzzer
+When ST eq 0 deactivate
+
+Only 1 sound produced and it's undefined. (use 440Hz (A))
+
+** Instructions
+35 16bit instructions 
+
+* Sources
+http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
