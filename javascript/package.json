@@ -1,0 +1,21 @@
+{
+  "name": "chip8-js",
+  "version": "0.1.0",
+  "description": "Chip8 emulator and tools.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "chip8",
+    "emulator"
+  ],
+  "author": "Jonathan Willis",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "mocha": "^2.3.4"
+  }
+}
