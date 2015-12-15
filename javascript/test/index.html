@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Mocha Spec Runner</title>
+        <link href="/node_modules/mocha/mocha.css" rel="stylesheet"/>
+
+    </head>
+    <body>
+        <div id="mocha"></div>
+        <script src="/node_modules/systemjs/dist/system.js"></script>
+        <script>
+         System.config({
+             meta: {
+                 '/src': {
+                     format: 'cjs'
+                     }
+             }
+         });
+        </script>
+        <script src="/node_modules/mocha/mocha.js"></script>
+            <script src="/node_modules/chai/chai.js"></script>
+            <script>
+             mocha.setup('bdd');
+            </script>
+        <script>
+         System.import('/test/unit/test-chip8.js');
+         mocha.run();
+        </script>
+    </body>
+</html>

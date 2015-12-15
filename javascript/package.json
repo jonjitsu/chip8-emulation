@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha test/unit --recursive"
+    "test": "mocha test/unit --recursive",
+    "test-watch": "node-inspector & xdg-open 'http://127.0.0.1:8080/?ws=127.0.0.1:8080&port=5858' && mocha --recursive --growl --watch --debug-brk test/unit/"
   },
   "keywords": [
     "chip8",
@@ -16,7 +17,12 @@
   "author": "Jonathan Willis",
   "license": "GPL-2.0",
   "dependencies": {
+    "systemjs": "^0.19.6"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.10.0",
     "chai": "^3.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "node-inspector": "^0.12.5"
   }
 }
