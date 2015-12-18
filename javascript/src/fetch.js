@@ -1,20 +1,8 @@
 
 var l = console.log.bind(console),
     fs = require('fs'),
-    isBrowser = function () {
-        try {
-            return this===window;
-        } catch(e) {
-            return false;
-        }
-    },
-    isNode = function() {
-        try {
-            return Object.prototype.toString.call(global.process)==='[object process]';
-        } catch(e) {
-            return false;
-        }
-    },
+    path = require('path'),
+    utils = require('./utils'),
     isExistingPath = function(p) {
         return fs.existsSync(p);
     },
@@ -22,10 +10,12 @@ var l = console.log.bind(console),
         var parts;
         if( (parts = /^([a-zA-Z0-9+\-.]+):\/\//.exec(uri)) ) {
             return parts[1];
-        } else if( isNode() && isExistingPath(uri) ) {
-            return 'file';
+        } else if( utils.isNodeJs() ) {
+            if( isExistingPath(uri) ) return 'file';
+            else return null;
         }
-        return null;
+
+        return 'file';
     },
 
     fetchFile = function(path) {
@@ -35,7 +25,7 @@ var l = console.log.bind(console),
                 resolve(data);
             });
         });
-    },
+    }, 
 
     nodeCurl = function(uri) {
         return new Promise(function(resolve, reject) {
@@ -60,7 +50,7 @@ var l = console.log.bind(console),
         // ajax
     },
     fetchHttp = function(uri) {
-        return isNode()
+        return utils.isNodeJs()
             ? nodeCurl(uri)
             : ajaxCurl(uri);
     },
@@ -73,7 +63,5 @@ var l = console.log.bind(console),
     }
 ;
 
-fetch.isBrowser = isBrowser;
-fetch.isNode = isNode;
 fetch.detectScheme = detectScheme;
 module.exports = fetch;
