@@ -32,9 +32,23 @@ module.exports = {
             byte%100%10
         ];
     },
-    extend: extend
+    extend: extend,
+    toHex: toHex,
+    error: error,
+    debug: debug
 };
 
+function toHex(opcode) {
+        return ('0000' + opcode.toString(16).toUpperCase()).slice(-4);
+}
+
+function error(opcode, message) {
+        throw new Error('[' + toHex(opcode) + ']' + message);
+}
+function debug(opcode, message) {
+        return;
+        console.log('[' + toHex(opcode) + ']' + message);
+}
 function isArray(arg) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
     return Object.prototype.toString.call(arg) === '[object Array]';

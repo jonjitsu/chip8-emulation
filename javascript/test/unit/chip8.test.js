@@ -417,13 +417,12 @@ describe('chip8', function () {
             assert(c8.PROGRAM_ENTRY+2===vm.state.pc);
         });
 
-        it('[Fx0A] can wait for a key press, store the value of the key in Vx', function(done) {
-            this.timeout(500);
-
+        it('[Fx0A] can wait for a key press, store the value of the key in Vx', function() {
             var key = 0x7,
+                callback=undefined,
                 bus = {
                     keyboardOnce: function(fn) {
-                        setTimeout(fn.bind(null, key), 100);
+                        callback=fn;
                     }
                 },
                 vm = c8.create(bus),
@@ -435,11 +434,10 @@ describe('chip8', function () {
             c8.process(vm, opcode);
             assert.isTrue(vm.isWaiting);
             assert(1===vm.state.registers[x]);
-            setTimeout(function() {
-                assert.isFalse(vm.isWaiting);
-                assert(key===vm.state.registers[x]);
-                done();
-            }, 200);
+            assert.isDefined(callback);
+            callback(key);
+            assert.isFalse(vm.isWaiting);
+            assert(key===vm.state.registers[x]);
         });
 
         it('[Fx07] can set Vx = delay timer value.', function() {

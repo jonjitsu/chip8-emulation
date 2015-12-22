@@ -1,9 +1,14 @@
 <html>
     <head>
 <title>Chip8 emulator</title>
+<style>
+    #disassembly { width: 100%; height:20em; }
+</style>
     </head>
     <body>
         <div id="display">To be replaced...</div>
+        <div id="controls">Upload rom: <input id="rom-uploader" type="file" value="Select file..." name="upload-rom" /></div>
+        <div><textarea id="disassembly"></textarea></div>
            <script src="/public/bundle.js"></script>
     </body>
 </html>

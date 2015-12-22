@@ -9,7 +9,7 @@ var gulp = require('gulp'),
     WebpackDevServer = require('webpack-dev-server')
 ;
 
-
+notifierReporter.options.expire=2000;
 gulp.task('test-node', function() {
     return gulp
         .src(['test/unit/*.test.js', 'test/unit/*.test-node.js'], {read: false})
@@ -22,7 +22,7 @@ gulp.task('test-node', function() {
                 title: 'test-node error',
                 message: 'Error in code caused mocha to crash',
                 urgency: 'critical',
-                time: 2
+                expire: 2
             });
         });
 });

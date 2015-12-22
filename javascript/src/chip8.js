@@ -33,7 +33,8 @@ const RAMSIZE = 4096,
       TIMER_FREQUENCY = 1000/60
 ;
 var utils = require('./utils'),
-
+    error = utils.error,
+    debug = utils.debug,
 
     now = function() {
         return new Date().getTime();
@@ -159,11 +160,12 @@ var utils = require('./utils'),
         return {
             state: state(),
             bus: bus.apply(null, arguments),
-            eop: 0x200,
+            eop: PROGRAM_ENTRY,
             isWaiting: false,
             dtTimer: timer(TIMER_FREQUENCY),
             stTimer: timer(TIMER_FREQUENCY),
-            stepper: intervalStepper(TIMER_FREQUENCY),
+            // stepper: intervalStepper(TIMER_FREQUENCY),
+            stepper: intervalStepper(1000/120),
             step: function() {
                 step(this)
             },
@@ -187,8 +189,13 @@ var utils = require('./utils'),
                 });
             },
             reset: function() {
-                this.state.pc = PROGRAM_ENTRY;
                 this.bus.displayClear();
+                this.dtTimer.reset();
+                this.stTimer.reset();
+                this.stepper.stop();
+                this.state = state();
+                this.eop = PROGRAM_ENTRY;
+                this.isWaiting = false;
             },
             break: function() {
                 isRunning = false;
@@ -229,16 +236,6 @@ var utils = require('./utils'),
     },
     extractValue = function(opcode) {
         return opcode & 0x00ff;
-    },
-
-    asHex = function(code) {
-        return ('0000' + code.toString(16).toUpperCase()).slice(-4);
-    },
-    error = function(opcode, message) {
-        throw new Error('[' + asHex(opcode) + ']' + message);
-    },
-    debug = function(opcode, message) {
-        console.log('[' + asHex(opcode) + ']' + message);
     },
 
     randomByte = function(start, end) {

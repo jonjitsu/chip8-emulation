@@ -68,5 +68,104 @@ Only 1 sound produced and it's undefined. (use 440Hz (A))
 ** Instructions
 35 16bit instructions 
 
+
+* Disassembly
+| 0nnn | SYS nnn            |
+| 00E0 | CLS                |
+| 00E0 | RET                |
+|      |                    |
+| 1nnn | JP nnn             |
+| Bnnn | JP V0, nnn         |
+|      |                    |
+| 2nnn | CALL nnn           |
+| 3xkk | SE Vx, kk          |
+| 5xy0 | SE Vx, Vy          |
+| 4xkk | SNE Vx, kk         |
+| 9xy0 | SNE Vx, Vy         |
+|      |                    |
+| 6xkk | LD Vx, kk          |
+| 8xy0 | LD Vx, Vy          |
+| Annn | LD I, nnn          |
+| Fx07 | LD Vx, DT          |
+| Fx0A | LD Vx, K           |
+| Fx15 | LD DT, Vx          |
+| Fx18 | LD St, Vx          |
+| Fx29 | LD F, Vx           |
+| Fx33 | LD B, Vx           |
+| Fx55 | LD [I], Vx         |
+| Fx65 | LD Vx, [I]         |
+|      |                    |
+|      |                    |
+| 7xkk | ADD Vx, kk         |
+| 8xy4 | ADD Vx, Vy         |
+| Fx1E | ADD I, Vx          |
+|      |                    |
+|      |                    |
+|      |                    |
+|      |                    |
+| 8xy1 | OR Vx, Vy          |
+| 8xy2 | AND Vx, Vy         |
+| 8xy3 | XOR Vx, Vy         |
+| 8xy5 | SUB Vx, Vy         |
+| 8xy6 | SHR Vx [,Vy]       |
+| 8xy7 | SUBN Vx, Vy        |
+| 8xyE | SHL Vx [,Vy]       |
+| Cxkk | RND Vx, kk         |
+| Dxyn | DRW Vx, Vy, nibble |
+| Ex9E | SKP Vx             |
+| ExA1 | SKNP Vx            |
+
+Sorted by type
+| 00E0 | CLS                |
+| 00E0 | RET                |
+
+| 0nnn | SYS nnn            |
+| 1nnn | JP nnn             |
+| 2nnn | CALL nnn           |
+| Annn | LD I, nnn          |
+| Bnnn | JP V0, nnn         |
+
+| 3xkk | SE Vx, kk          |
+| 4xkk | SNE Vx, kk         |
+| 6xkk | LD Vx, kk          |
+| 7xkk | ADD Vx, kk         |
+| Cxkk | RND Vx, kk         |
+
+| 5xy0 | SE Vx, Vy          |
+| 8xy0 | LD Vx, Vy          |
+| 8xy1 | OR Vx, Vy          |
+| 8xy2 | AND Vx, Vy         |
+| 8xy3 | XOR Vx, Vy         |
+| 8xy4 | ADD Vx, Vy         |
+| 8xy5 | SUB Vx, Vy         |
+| 8xy6 | SHR Vx [,Vy]       |
+| 8xy7 | SUBN Vx, Vy        |
+| 8xyE | SHL Vx [,Vy]       |
+| 9xy0 | SNE Vx, Vy         |
+
+| Ex9E | SKP Vx             |
+| ExA1 | SKNP Vx            |
+| Fx07 | LD Vx, DT          |
+| Fx0A | LD Vx, K           |
+| Fx15 | LD DT, Vx          |
+| Fx18 | LD St, Vx          |
+| Fx29 | LD F, Vx           |
+| Fx33 | LD B, Vx           |
+| Fx55 | LD [I], Vx         |
+| Fx65 | LD Vx, [I]         |
+| Fx1E | ADD I, Vx          |
+
+| Dxyn | DRW Vx, Vy, nibble |
+
+1st nibble: instruction type
+next 3 nibbles:
+- static
+- 3 nibble address
+- register nibble | byte 2 nibbles
+- register nibble | register nibble | static nibble
+- register nibble | static 2 nibble
+- register nibble | register nibble | nibble
+
+
 * Sources
 http://devernay.free.fr/hacks/chip8/C8TECH10.HTM

@@ -1,5 +1,7 @@
-var utils = require('./utils.js'),
+var l = console.log.bind(console),
+    utils = require('./utils.js'),
     chip8 = require('./chip8.js'),
+    dasm = require('./dasm.js'),
     canvasDisplay = require('./canvas-display.js'),
     display = canvasDisplay(),
     soundSystem = require('./sound-system.js'),
@@ -18,9 +20,41 @@ window.sprite = [0xF0, 0x90, 0x90, 0x90, 0xF0];
 
 onready(main);
 
+function loadRom(e) {
+    var file = e.target.files[0],
+        reader = new FileReader();
+
+    if(file) {
+        reader.onload = function(e) {
+            var data = new Uint8Array(e.target.result);
+            vm.reset();
+            vm.loadProgram(data);
+            loadDisassembly(data);
+            l('ROM loaded!');
+            // vm.run();
+        }
+        reader.readAsArrayBuffer(file);
+    } else {
+        l('Cannot load rom!', e);
+    }
+}
+
+function insertContent(id, content) {
+    var el = document.getElementById(id);
+    if(el) el.innerHTML = content;
+}
+function loadDisassembly(data) {
+    insertContent('disassembly', dasm(data).toString());
+}
+function setupRomUploader(id) {
+    var input = document.getElementById(id);
+    input.addEventListener('change', loadRom, false);
+}
+
 function main() {
     vm.bus = utils.extend(vm.bus, display.api);
     addElementTo(display.el, 'display');
+    setupRomUploader('rom-uploader');
 }
 
 function addElementTo(el, id) {
